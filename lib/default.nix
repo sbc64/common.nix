@@ -1,11 +1,4 @@
-{
-  inputs,
-  stateVersion,
-  lib,
-  revInfo ? "",
-  moduleLocation,
-}: let
-in {
+lib: moduleLocation: inputs: {
   /*
   mkHome = {
     hostname,
@@ -20,18 +13,14 @@ in {
       };
       modules = [../home-manager];
     };
-    */
+  */
 
   mkHost = {
     hostname,
+    stateVersion,
     system ? "x86_64-linux",
-    inputs,
     extraModules ? [],
-    pkgSet ? "nixos",
-  }: let
-    pkgs = inputs."${pkgSet}".legacyPackages.${system};
-    lib = inputs."${pkgSet}".lib;
-  in
+  }:
     lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -39,14 +28,15 @@ in {
       };
       modules =
         [
-          ({config, ...}: let
-          in {
+          {
             networking.hostName = lib.mkDefault hostname;
             networking.hostId = lib.mkDefault (builtins.substring 0 8 (
               builtins.hashString "md5" hostname
             ));
             system.stateVersion = lib.mkDefault stateVersion;
-          })
+          }
+          # TODO, replace this search files by using the way that cachix
+          # searches for files
           (
             if
               (builtins.pathExists
@@ -67,7 +57,7 @@ in {
             }
             else {}
           )
-          (import "${moduleLocation}/hosts/common.nix" {inherit pkgs lib;})
+          ../modules/common.nix
         ]
         ++ extraModules;
     };

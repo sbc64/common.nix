@@ -1,11 +1,9 @@
-{pkgs, ...}: let
-  sshKeys = (import ./vars.nix).sshKeys;
-  #sshPort = 45666;
+{pkgs, lib, ...}: let
+  sshKeys = (import ../secrets/secrets.nix).me.publicKeys;
   sshPort = 22;
 in {
-  networking.useDHCP = true;
+  networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = false;
-
   users.users.root = {
     initialHashedPassword = "$y$j9T$3YEmKQGneWxEvwnkfNVqx1$IWrh4Yx8e.tl04wc/q0Ht1Xkj2kKiAoy41tcECuRsc.";
     openssh.authorizedKeys.keys = sshKeys;
@@ -17,29 +15,12 @@ in {
   };
 
   services = {
-    /*
-    TODO remove this since all you need is wireguard ssh access
-    */
-    fail2ban.enable = false;
-    endlessh-go = {
-      enable = false;
-      openFirewall = true;
-      port = 22;
-      extraOptions = [
-        "-geoip_supplier=ip-api"
-      ];
-      prometheus = {
-        enable = true;
-        listenAddress = "127.0.0.1";
-      };
-    };
     openssh = {
+      enable = true;
       openFirewall = true;
       ports = [
         sshPort
       ];
-
-      enable = true;
       settings = {
         PasswordAuthentication = false;
         LogLevel = "VERBOSE"; # neded by fail2ban
@@ -88,7 +69,7 @@ in {
     tmux = {
       enable = true;
       newSession = true;
-      extraConfig = builtins.readFile ../tmux.conf;
+      extraConfig = builtins.readFile ./tmux.conf;
     };
   };
 }
