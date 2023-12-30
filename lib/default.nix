@@ -1,4 +1,4 @@
-lib: moduleLocation: inputs: {
+lib: libModules: callingFlakePath: {
   /*
   mkHome = {
     hostname,
@@ -18,6 +18,7 @@ lib: moduleLocation: inputs: {
   mkHost = {
     hostname,
     stateVersion,
+    inputs ? {},
     system ? "x86_64-linux",
     extraModules ? [],
   }:
@@ -40,24 +41,23 @@ lib: moduleLocation: inputs: {
           (
             if
               (builtins.pathExists
-                "${moduleLocation}/hosts/${hostname}/default.nix")
-            then "${moduleLocation}/hosts/${hostname}"
+                "${callingFlakePath}/hosts/${hostname}/default.nix")
+            then "${callingFlakePath}/hosts/${hostname}"
             else {}
           )
           (
             if
               (builtins.pathExists
-                "${moduleLocation}/hosts/${hostname}/disk-config.nix")
+                "${callingFlakePath}/hosts/${hostname}/disk-config.nix")
             then {
               imports = [
-                "${moduleLocation}/hosts/${hostname}/disk-config.nix"
-                "${moduleLocation}/modules/zfs-common"
+                libModules.zfs-common
                 inputs.disko.nixosModules.disko
               ];
             }
             else {}
           )
-          "${moduleLocation}/modules/common"
+          libModules.common
         ]
         ++ extraModules;
     };
