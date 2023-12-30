@@ -1,5 +1,9 @@
-{pkgs, lib, ...}: let
-  sshKeys = (import ../../secrets/secrets.nix).me.publicKeys;
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  sshKeys = (import ../ssh-key);
   sshPort = 22;
 in {
   networking.useDHCP = lib.mkDefault true;
