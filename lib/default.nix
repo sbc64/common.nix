@@ -52,12 +52,15 @@ lib: libModules: callingFlakePath: {
             then {
               imports = [
                 libModules.zfs-common
-                inputs.disko.nixosModules.disko
+                libModules.disko
+                "${callingFlakePath}/hosts/${hostname}/disk-config.nix"
               ];
             }
             else {}
           )
+          # TODO, auto expand list of modules using self.nixosModules
           libModules.common
+          libModules.agenix
         ]
         ++ extraModules;
     };
