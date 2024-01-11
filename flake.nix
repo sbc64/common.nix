@@ -1,4 +1,5 @@
 {
+  description = "Common NixOS modules for my nix use cases";
   inputs = {
     # Commented out dir=lib because we need the extended lib for using functions such as
     # nixosSystem: https://github.com/NixOS/nixpkgs/blob/b878cb4ca34d62b19b06b00518d7cf249530c343/flake.nix#L18
@@ -16,7 +17,6 @@
       inputs.nixpkgs.follows = "unstable";
     };
     deploy-rs.url = "github:serokell/deploy-rs/724463b5a94daa810abfc64a4f87faef4e00f984";
-
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "unstable";
@@ -28,21 +28,25 @@
     unstable,
     ...
   } @ inputs: let
-    lib = import ./lib unstable.lib;
-    inherit (unstable.lib) genAttrs filterAttrs;
+    libx = import ./lib unstable.lib self.nixosModules;
   in {
     # TODO extend the standard library to include your personal functions, that
     # way you only use the extended library in all your other repos
-    inherit lib;
-    nixosModules = let
+    lib = libx;
+    nixosModules = with unstable.lib; let
       folder = ./modules;
       toImport = name: (import "${folder}/${name}");
       filterModules = _: value: value == "directory";
       names = builtins.attrNames (filterAttrs filterModules (builtins.readDir folder));
+      modules = genAttrs names toImport;
     in
-      genAttrs names toImport;
+      modules
+      // {
+        agenix = inputs.agenix.nixosModules.default;
+        disko = inputs.disko.nixosModules.disko;
+      };
 
-    nixosConfigurations.vm = (lib self.nixosModules self.outPath).mkHost {
+    nixosConfigurations.vm = (libx self.outPath).mkHost {
       hostname = "vm";
       system = "aarch64-linux";
       stateVersion = "24.05";
