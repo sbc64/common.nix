@@ -16,7 +16,6 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "unstable";
     };
-    deploy-rs.url = "github:serokell/deploy-rs/724463b5a94daa810abfc64a4f87faef4e00f984";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "unstable";
@@ -40,6 +39,10 @@
       names = builtins.attrNames (filterAttrs filterModules (builtins.readDir folder));
       modules = genAttrs names toImport;
     in
+      /*
+      nixosModules.default.all = mkMerge [
+      ];
+      */
       modules
       // {
         agenix = inputs.agenix.nixosModules.default;
@@ -68,10 +71,5 @@
           ${self.packages.aarch64-darwin.vm}/bin/run-vm-vm''
       }";
     };
-
-    /*
-    nixosModules.default.all = mkMerge [
-    ];
-    */
   };
 }
