@@ -1,6 +1,4 @@
-{
-  ...
-}: {
+{...}: {
   environment = {
     etc."ssh/ssh_host_ed25519_key".text = ''
       -----BEGIN OPENSSH PRIVATE KEY-----
