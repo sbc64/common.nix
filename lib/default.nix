@@ -25,7 +25,7 @@ lib: libModules: callingFlakePath: {
     lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit inputs;
+        inherit inputs callingFlakePath;
       };
       modules =
         [

@@ -1,6 +1,7 @@
-{
+wifiname: {
   config,
   lib,
+  callingFlakePath,
   ...
 }: let
   cfg = config.within.wireless;
@@ -13,14 +14,14 @@ in {
     };
   };
   config = mkIf (cfg.enable) {
-    age.secrets."openwrt-psk" = {
-      file = ../../../secrets/openwrt-psk.age;
-      path = "/run/agenix/openwrt-psk";
+    age.secrets."${wifiname}-psk" = {
+      file = "${callingFlakePath}/secrets/${wifiname}-psk.age";
+      path = "/run/agenix/${wifiname}-psk";
     };
     networking.wireless.enable = true;
     networking.wireless = {
-      environmentFile = config.age.secrets.openwrt-psk.path;
-      networks.OpenWrt.psk = "@PSK@";
+      environmentFile = config.age.secrets.${wifiname} - psk.path;
+      networks.${wifiname}.psk = "@PSK@";
     };
   };
 }
