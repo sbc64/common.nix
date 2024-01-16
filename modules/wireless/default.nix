@@ -20,7 +20,7 @@ in {
     };
     networking.wireless.enable = true;
     networking.wireless = {
-      environmentFile = config.age.secrets.${wifiname} - psk.path;
+      environmentFile = config.age.secrets."${wifiname}-psk".path;
       networks.${wifiname}.psk = "@PSK@";
     };
   };
