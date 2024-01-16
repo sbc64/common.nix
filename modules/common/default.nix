@@ -9,6 +9,9 @@ in {
   imports = [
     ../nixpkgs
   ];
+  boot = {
+     initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" "nvme" ];
+  };
   networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = false;
   users.users.root = {
