@@ -12,6 +12,8 @@ in {
       kernelPackages =
         mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
       supportedFilesystems = ["zfs"];
+      initrd.supportedFilesystems = ["zfs"];
+
       zfs = {
         # needed because /dev/disk/by-id is empty in qemu-vms
         #zfs.devNodes = "/dev/disk/by-uuid";
@@ -20,7 +22,7 @@ in {
       loader = {
         generationsDir.copyKernels = true;
         grub = {
-          enable = true;
+          enable = mkDefault true;
           copyKernels = true;
           efiSupport = true;
           zfsSupport = true;
