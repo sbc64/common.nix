@@ -9,8 +9,11 @@ in {
   imports = [
     ../nixpkgs
   ];
-  boot = {
-     initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" "nvme" ];
+  boot = let
+    modules = ["xhci_pci" "xhci" "hcd" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
+  in {
+    initrd.availableKernelModules = modules;
+    kernelModules = modules;
   };
   networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = false;
@@ -55,6 +58,7 @@ in {
       htop
       busybox
       wget
+      ncdu
       ;
   };
   programs = {
