@@ -10,7 +10,7 @@ in {
     ../nixpkgs
   ];
   boot = let
-    modules = ["xhci_pci" "xhci" "hcd" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
+    modules = ["xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
   in {
     initrd.availableKernelModules = modules;
     kernelModules = modules;
