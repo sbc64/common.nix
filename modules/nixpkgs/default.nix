@@ -8,7 +8,7 @@
   nix = {
     package = pkgs.nixUnstable;
     settings = {
-      trusted-users = ["root" "@admin" "@builder"];
+      trusted-users = ["root" "@admin"];
       substituters = [
         "https://devenv.cachix.org"
         "https://cache.nixos.org/"
