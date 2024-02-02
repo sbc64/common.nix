@@ -54,12 +54,13 @@ lib: libModules: callingFlakePath: rec {
     filteredSet2 = lib.filterAttrs (name: value: !builtins.hasAttr name set1) set2;
   in
     set1 // filteredSet2;
-  mkHosts = hosts:
+  mkHosts = configs:
     builtins.mapAttrs (
       name: value:
         mkHost (mergeIfNotExist value {hostname = name;})
     )
-    hosts;
+    configs;
+
   mkColmena = {
     description ? "",
     configurations,
