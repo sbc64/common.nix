@@ -1,4 +1,4 @@
-lib: libModules: callingFlakePath: {
+lib: libModules: callingFlakePath: rec {
   mkHost = {
     hostname,
     stateVersion,
@@ -50,6 +50,16 @@ lib: libModules: callingFlakePath: {
         ++ extraModules;
     };
 
+  mergeIfNotExist = set1: set2: let
+    filteredSet2 = lib.filterAttrs (name: value: !builtins.hasAttr name set1) set2;
+  in
+    set1 // filteredSet2;
+  mkHosts = hosts:
+    builtins.mapAttrs (
+      name: value:
+        mkHost (mergeIfNotExist value {hostname = name;})
+    )
+    hosts;
   mkColmena = {
     description ? "",
     configurations,

@@ -7,7 +7,7 @@
   builderKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICllOC9xAgR6ROJSFotRNrfErKGayL+lVd0fjC3g3VtG";
 in {
   users.groups.builder = {
-    members = [ "builder" "sebas" "root" ];
+    members = ["builder" "sebas" "root"];
   };
   users.users."builder" = {
     isNormalUser = true;
