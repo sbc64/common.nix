@@ -1,15 +1,41 @@
 lib: libModules: callingFlakePath: rec {
+  mkSecret = name: {
+    secretDir,
+    default ? {
+      path = "/run/agenix/${name}";
+      symlink = true;
+      mode = "0400";
+      group = "0";
+      owner = "0";
+    },
+  }:
+    default
+    // {
+      file = "${secretDir}/${name}.age";
+      inherit name;
+    };
+
+  mkSecrets = secrets:
+    builtins.mapAttrs (
+      name: value:
+        mkSecret name value
+    )
+    secrets;
+
   mkHost = {
     hostname,
     stateVersion,
     inputs ? {},
     system ? "x86_64-linux",
     extraModules ? [],
-  }:
+    libx ? {},
+  }: let
+    libx = inputs.libx.lib callingFlakePath;
+  in
     lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit inputs callingFlakePath;
+        inherit inputs callingFlakePath libx;
       };
       modules =
         [
