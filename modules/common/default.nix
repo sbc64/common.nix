@@ -14,6 +14,7 @@ in {
   in {
     initrd.availableKernelModules = modules;
     kernelModules = modules;
+    loader.timeout = lib.mkForce 5;
   };
   networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = false;
@@ -59,6 +60,8 @@ in {
       busybox
       wget
       ncdu
+      fd
+      glances
       ;
   };
   programs = {
