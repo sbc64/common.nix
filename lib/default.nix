@@ -85,7 +85,7 @@ lib: libModules: callingFlakePath: rec {
     nixpkgs,
     deployments,
   }: let
-    inherit (builtins) mapAttrs head filter;
+    inherit (builtins) mapAttrs;
 
     renameAttr = oldName: newName: set:
       if builtins.hasAttr oldName set
