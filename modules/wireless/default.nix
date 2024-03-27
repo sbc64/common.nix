@@ -5,6 +5,7 @@ wifiname: {
   ...
 }: let
   cfg = config.within.wireless;
+  sshPort = builtins.elemAt config.services.openssh.ports 0;
   inherit (lib) mkIf mkOption types;
 in {
   options.within.wireless = {
@@ -18,6 +19,9 @@ in {
       file = "${callingFlakePath}/secrets/${wifiname}-psk.age";
       path = "/run/agenix/${wifiname}-psk";
     };
+    networking.firewall.extraInputRules = ''
+      iifname wlp3s0 tcp dport ${builtins.toString sshPort} accept
+    '';
     networking.wireless.enable = true;
     networking.wireless = {
       environmentFile = config.age.secrets."${wifiname}-psk".path;
