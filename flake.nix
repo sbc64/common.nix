@@ -8,7 +8,10 @@
     #nixpkgs-lib.url = "github:NixOS/nixpkgs/nixos-unstable";
     # This current implementation likely leaves too many copies of nixpkgs everywhere
     stable.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "stable";
@@ -49,6 +52,7 @@
         agenix = inputs.agenix.nixosModules.default;
         disko = inputs.disko.nixosModules.disko;
         srvos = inputs.srvos.nixosModules;
+        home-manager = inputs.home-manager.nixosModules.home-manager;
         pi4Base = {lib, ...}: {
           imports = [
             "${stable}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
