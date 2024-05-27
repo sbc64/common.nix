@@ -1,3 +1,4 @@
+# https://github.com/otavio/nix-config/blob/acd39f39b97677e1bd7aadf542fc41c334b1890d/lib/default.nix#L4-L13
 lib: libModules: callingFlakePath: rec {
   mkSecret = name: {
     secretDir,
@@ -34,6 +35,7 @@ lib: libModules: callingFlakePath: rec {
       specialArgs = {
         inherit inputs callingFlakePath libx;
       };
+      #extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
       modules =
         [
           {
@@ -117,6 +119,7 @@ lib: libModules: callingFlakePath: rec {
           }
         ]
         ++ configurations.${name}._module.args.modules;
+
     })
     deployments;
 }
