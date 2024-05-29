@@ -119,7 +119,6 @@ lib: libModules: callingFlakePath: rec {
           }
         ]
         ++ configurations.${name}._module.args.modules;
-
     })
     deployments;
 }
