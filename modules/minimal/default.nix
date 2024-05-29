@@ -66,10 +66,5 @@ in {
   programs = {
     git.enable = true;
     mosh.enable = true;
-    tmux = {
-      enable = true;
-      newSession = true;
-      extraConfig = builtins.readFile ./tmux.conf;
-    };
   };
 }
