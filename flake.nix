@@ -7,7 +7,7 @@
     # and try to make a lean lib usage here
     #nixpkgs-lib.url = "github:NixOS/nixpkgs/nixos-unstable";
     # This current implementation likely leaves too many copies of nixpkgs everywhere
-    stable.url = "github:NixOS/nixpkgs/nixos-23.11";
+    stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
