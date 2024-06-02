@@ -6,9 +6,14 @@
   sshKeys = import ../ssh-key;
 in {
   users.users.root = {
-    initialHashedPassword = "$y$j9T$3YEmKQGneWxEvwnkfNVqx1$IWrh4Yx8e.tl04wc/q0Ht1Xkj2kKiAoy41tcECuRsc.";
+    # TODO hashedPasswordFile = config.age.secrets.bemeurerPassword.path;
+    initialHashedPassword = "$y$j9T$B6t8OsusxnuUA6rZVUtp11$VloSf3w9NcebBTq4ZNsug8fGTzsTgSgW/qDJgMb6AN2";
+    hashedPassword = "$y$j9T$I/X.RtYltur4QwBNUOY800$4PTLxrXrQcbsar2vtigMzfAEP6/B0CRm.i3RtZNgIT3";
     openssh.authorizedKeys.keys = sshKeys;
   };
+  hardware.cpu.amd.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
+  hardware.cpu.intel.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux      ";
+
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -28,7 +33,8 @@ in {
   };
 
   services = {
-    smartd.enable = lib.mkDefault false;
+    smartd.enable = lib.mkDefault false; # Create a backups module
+    scrutiny.enable = true; # Move to a backups module
     openssh = {
       enable = true;
       ports = [
