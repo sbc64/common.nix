@@ -7,7 +7,7 @@
 in {
   users.users.root = {
     # TODO hashedPasswordFile = config.age.secrets.bemeurerPassword.path;
-    initialHashedPassword = "$y$j9T$B6t8OsusxnuUA6rZVUtp11$VloSf3w9NcebBTq4ZNsug8fGTzsTgSgW/qDJgMb6AN2";
+    #initialHashedPassword = "$y$j9T$B6t8OsusxnuUA6rZVUtp11$VloSf3w9NcebBTq4ZNsug8fGTzsTgSgW/qDJgMb6AN2";
     hashedPassword = "$y$j9T$I/X.RtYltur4QwBNUOY800$4PTLxrXrQcbsar2vtigMzfAEP6/B0CRm.i3RtZNgIT3";
     openssh.authorizedKeys.keys = sshKeys;
   };
@@ -34,7 +34,7 @@ in {
 
   services = {
     smartd.enable = lib.mkDefault false; # Create a backups module
-    scrutiny.enable = true; # Move to a backups module
+    scrutiny.enable = lib.mkDefault false; # Move to a backups module
     openssh = {
       enable = true;
       ports = [
