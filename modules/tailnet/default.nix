@@ -36,7 +36,7 @@ in {
   };
   config = mkIf (cfg.enable) {
     services.tailscale = {
-      package = inputs.unstable.legacyPackages.${pkgs.system}.tailscale;
+      package = pkgs.tailscaleUnstable;
       enable = true;
       extraUpFlags = [
         (lib.optionalString cfg.allowSSH "--ssh")

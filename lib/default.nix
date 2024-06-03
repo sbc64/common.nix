@@ -70,6 +70,7 @@ lib: libModules: callingFlakePath: rec {
           libModules.nixpkgs
           libModules.tmux
           libModules.agenix
+          libModules.tsUnstable
         ]
         ++ extraModules;
     };

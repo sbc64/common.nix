@@ -47,6 +47,15 @@
     in
       modules
       // {
+        tsUnstable = {
+          ...
+        }: {
+          nixpkgs.overlays = [
+            (final: prev: {
+              tailscaleUnstable = inputs.unstable.legacyPackages.${prev.system}.tailscale;
+            })
+          ];
+        };
         agenix = inputs.agenix.nixosModules.default;
         disko = inputs.disko.nixosModules.disko;
         srvos = inputs.srvos.nixosModules;
@@ -83,7 +92,6 @@
           };
         };
       };
-
     nixosConfigurations = (libx self.outPath).mkHosts {
       pi4Base = {
         inherit stateVersion;
