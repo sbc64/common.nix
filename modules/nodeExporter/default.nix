@@ -15,17 +15,42 @@ in {
       type = types.int;
       default = 9132;
     };
-  };
-  config = mkIf (cfg.enable) {
-    services.prometheus = {
-      exporters = {
-        node = {
-          enable = true;
-          enabledCollectors = ["systemd"];
-          port = cfg.port;
-          listenAddress = "127.0.0.1";
-        };
+    agent = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      remoteWriteUrl = mkOption {
+        type = types.str;
+        default = null;
       };
     };
   };
+  config = mkMerge [
+    (mkIf (cfg.enable) {
+      services.prometheus = {
+        exporters = {
+          node = {
+            enable = true;
+            enabledCollectors = ["systemd"];
+            port = cfg.port;
+            listenAddress = "127.0.0.1";
+          };
+        };
+      };
+    })
+    (
+      mkIf cfg.agent.enable {
+        services.prometheus = {
+          enable = true;
+          enableAgentMode = true;
+          remoteWrite = [
+            {
+              url = "${cfg.agent.remoteWriteUrl}/api/v1/write";
+            }
+          ];
+        };
+      }
+    )
+  ];
 }
