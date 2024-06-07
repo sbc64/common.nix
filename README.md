@@ -8,5 +8,6 @@ GitHub is mirror, the repository is located at [sr.ht](https://git.sr.ht/~sebohe
 ## TODO
 
 - [ ] Create a wrapped nvim based on this: https://github.com/pete3n/nixvim-flake/blob/main/flake.nix#L46
-- [ ] Create a tui module that has the different you need for your development environment
+- [ ] Create a tui-dev module that is different to the tui you would use on working servers.
 - [ ] Add [tailscale](https://registry.terraform.io/providers/tailscale/tailscale/0.16.1) terraform server provisioning to spin up servers more easily
+- [ ] Add terranix
