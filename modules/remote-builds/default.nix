@@ -19,7 +19,14 @@ in {
   nix = {
     settings = {
       trusted-users = ["@builder"];
-      system-features = ["big-parallel" "kvm"];
+      /*
+      https://nixos.wiki/wiki/Distributed_build#Remote_builders.27_features
+      Feature	Derivations requiring it
+      kvm	Everything which builds inside a vm, like NixOS tests
+      nixos-test	Machine can run NixOS tests
+      big-parallel	kernel config, libreoffice, evolution, llvm and chromium
+      benchmark	Machine can generate metrics (means the builds usually takes the same amount of time)
+      */
     };
     sshServe = {
       enable = true;

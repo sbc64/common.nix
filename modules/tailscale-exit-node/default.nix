@@ -8,6 +8,8 @@ with lib; let
 in {
   age.secrets."tsAuthKey" = {
     file = "${callingFlakePath}/secrets/tailscale-auth.age";
+    path = "/run/tsAuthKey";
+    symlink = false;
   };
   services.tailscale = {
     enable = true;
