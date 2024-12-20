@@ -8,11 +8,11 @@
     #nixpkgs-lib.url = "github:NixOS/nixpkgs/nixos-unstable";
     # This current implementation likely leaves too many copies of nixpkgs everywhere
     stable.url = "github:NixOS/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "unstable";
     };
     agenix = {
       url = "github:ryantm/agenix";
@@ -30,13 +30,13 @@
     stable,
     ...
   } @ inputs: let
-    libx = import ./lib stable.lib self.nixosModules;
-    stateVersion = "23.11";
-  in {
     # TODO extend the standard library to include your personal functions, that
     # way you only use the extended library in all your other repos
     # one way to do it is like this:
     # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/flake.nix
+    libx = import ./lib stable.lib self.nixosModules;
+    stateVersion = "24.05";
+  in {
     lib = libx;
     nixosModules = with stable.lib; let
       folder = ./modules;
@@ -45,10 +45,6 @@
       names = builtins.attrNames (filterAttrs filterModules (builtins.readDir folder));
       modules = genAttrs names toImport;
     in
-      /*
-      nixosModules.default.all = mkMerge [
-      ];
-      */
       modules
       // {
         agenix = inputs.agenix.nixosModules.default;

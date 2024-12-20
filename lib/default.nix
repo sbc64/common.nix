@@ -26,7 +26,6 @@ lib: libModules: callingFlakePath: rec {
     inputs ? {},
     system ? "x86_64-linux",
     extraModules ? [],
-    libx ? {},
   }: let
     libx = inputs.libx.lib callingFlakePath;
   in
@@ -35,7 +34,6 @@ lib: libModules: callingFlakePath: rec {
       specialArgs = {
         inherit inputs callingFlakePath libx;
       };
-      #extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
       modules =
         [
           {
