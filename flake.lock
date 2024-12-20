@@ -5,7 +5,7 @@
         "darwin": "darwin",
         "home-manager": "home-manager",
         "nixpkgs": [
-          "stable"
+          "pkgs2405"
         ],
         "systems": "systems"
       },
@@ -48,7 +48,7 @@
     "disko": {
       "inputs": {
         "nixpkgs": [
-          "stable"
+          "pkgs2405"
         ]
       },
       "locked": {
@@ -89,7 +89,7 @@
     "home-manager_2": {
       "inputs": {
         "nixpkgs": [
-          "stable"
+          "pkgs2405"
         ]
       },
       "locked": {
@@ -138,14 +138,30 @@
         "type": "github"
       }
     },
+    "pkgs2405": {
+      "locked": {
+        "lastModified": 1728500571,
+        "narHash": "sha256-dOymOQ3AfNI4Z337yEwHGohrVQb4yPODCW9MDUyAc4w=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d51c28603def282a24fa034bcb007e2bcb5b5dd0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
         "disko": "disko",
         "home-manager": "home-manager_2",
         "nixos-hardware": "nixos-hardware",
+        "pkgs2405": "pkgs2405",
         "srvos": "srvos",
-        "stable": "stable",
         "unstable": "unstable"
       }
     },
@@ -164,22 +180,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "srvos",
-        "type": "github"
-      }
-    },
-    "stable": {
-      "locked": {
-        "lastModified": 1727907660,
-        "narHash": "sha256-QftbyPoieM5M50WKUMzQmWtBWib/ZJbHo7mhj5riQec=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5966581aa04be7eff830b9e1457d56dc70a0b798",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-24.05",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
