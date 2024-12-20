@@ -4,11 +4,11 @@
   pkgs,
   ...
 }: {
-  boot.loader.systemd-boot.configurationLimit = 50;
+  boot.loader.systemd-boot.configurationLimit = 25;
   nix = {
     package = pkgs.nixUnstable;
     settings = {
-      trusted-users = ["root" "@admin"];
+      trusted-users = ["root" "@admin" "@wheel" ];
       substituters = [
         "https://devenv.cachix.org"
         "https://cache.nixos.org/"
