@@ -43,7 +43,6 @@ lib: libModules: callingFlakePath: rec {
             }
             else {}
           )
-          # TODO, auto expand list of modules using self.nixosModules
           libModules.common
           libModules.agenix
         ]
@@ -54,6 +53,7 @@ lib: libModules: callingFlakePath: rec {
     filteredSet2 = lib.filterAttrs (name: value: !builtins.hasAttr name set1) set2;
   in
     set1 // filteredSet2;
+
   mkHosts = configs:
     builtins.mapAttrs (
       name: value:
@@ -81,7 +81,7 @@ lib: libModules: callingFlakePath: rec {
         value._module.args.modules
         ++ [
           {
-            deployment = elemAt (filter (v: v.targetHost == name) deployments) 0;
+            deployment = mergeIfNotExist (elemAt (filter (v: v.targetHost == name) deployments) 0) {buildOnTarget = true;};
           }
         ];
     })
