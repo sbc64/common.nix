@@ -14,7 +14,7 @@ in {
   };
   config = mkIf (cfg.enable) {
     age.secrets."openwrt-psk" = {
-      file = ../../secrets/openwrt-psk.age;
+      file = ../../../secrets/openwrt-psk.age;
       path = "/run/agenix/openwrt-psk";
     };
     networking.wireless.enable = true;

@@ -16,15 +16,17 @@
     unstable,
   } @ inputs: let
     libx = import ./lib unstable.lib;
+    lib = unstable.lib;
     mkHost = (libx self.outPath inputs).mkHost;
   in {
     lib = libx;
-    nixosModules = {
-      common = import ./modules/common.nix;
-      cachix = import ./modules/cachix;
-      vm = import ./modules/vm;
-    };
-
+    nixosModules = let
+      folder = ./modules;
+      toImport = name: (import "${folder}/${name}");
+      filterModules = _: value: value == "directory";
+      names = builtins.attrNames (lib.filterAttrs filterModules (builtins.readDir folder));
+    in
+      lib.genAttrs names toImport;
     nixosConfigurations.vm = mkHost {
       hostname = "vm";
       system = "aarch64-linux";

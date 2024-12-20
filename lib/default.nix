@@ -57,7 +57,7 @@ lib: moduleLocation: inputs: {
             }
             else {}
           )
-          ../modules/common.nix
+          "${moduleLocation}/modules/common"
         ]
         ++ extraModules;
     };

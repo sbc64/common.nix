@@ -32,7 +32,7 @@ in {
   config = mkIf (cfg.enable) {
     services.tailscale.enable = true;
     age.secrets."tsAuthKey" = {
-      file = ../../secrets/tailscale-auth.age;
+      file = ../../../secrets/tailscale-auth.age;
     };
     networking = {
       firewall.trustedInterfaces = ["tailscale0"];
