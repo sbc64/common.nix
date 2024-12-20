@@ -55,6 +55,7 @@ lib: libModules: callingFlakePath: {
                 libModules.disko
                 "${callingFlakePath}/hosts/${hostname}/disk-config.nix"
               ];
+              disko-zfs.enable = lib.mkDefault true;
             }
             else {}
           )
