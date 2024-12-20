@@ -7,6 +7,7 @@
 in {
   imports = [
     ../nixpkgs
+    ./fonts.nix
   ];
   boot = let
     modules = ["xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
