@@ -1,12 +1,11 @@
 let
-  builder = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICllOC9xAgR6ROJSFotRNrfErKGayL+lVd0fjC3g3VtG builder@localhost";
-  mbpMe = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHUAbxX6TG1lsVbPPG4qk5GTFP2H7rDjRpGkFWqXKB2I sbc64@pm.me";
+  #builder = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICllOC9xAgR6ROJSFotRNrfErKGayL+lVd0fjC3g3VtG builder@localhost";
+  mbpMe = import ../modules/ssh-key;
   me = [
-    mbpMe
-    # This is the mini key, disabling for now because I need to rotate it outa2
+    # This is the mini key, disabling for now because I need to rotate it out
     #"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAB/hlAvEO3FKG2I4aCmV/3v0Ebenh5Ye3QTo9LXzA4O sebas@mini"
-    builder
-  ];
+    #builder
+  ] ++ mbpMe;
 in {
   "me".publicKeys = me;
 }
