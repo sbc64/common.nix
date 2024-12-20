@@ -73,7 +73,6 @@ lib: libModules: callingFlakePath: rec {
       else set;
 
     mvIp = deploy: renameAttr "ip" "targetHost" deploy;
-
   in
     {
       meta = {
@@ -84,8 +83,7 @@ lib: libModules: callingFlakePath: rec {
     }
     // mapAttrs (name: value: {
       imports =
-        configurations.${name}._module.args.modules
-        ++ [
+        [
           {
             deployment =
               {
@@ -94,7 +92,8 @@ lib: libModules: callingFlakePath: rec {
               }
               // mvIp value;
           }
-        ];
+        ]
+        ++ configurations.${name}._module.args.modules;
     })
     deployments;
 }
