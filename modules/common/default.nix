@@ -4,7 +4,6 @@
   ...
 }: let
   sshKeys = import ../ssh-key;
-  sshPort = 22;
 in {
   imports = [
     ../nixpkgs
@@ -16,8 +15,11 @@ in {
     kernelModules = modules;
     loader.timeout = lib.mkForce 5;
   };
-  networking.useDHCP = lib.mkDefault true;
-  networking.networkmanager.enable = false;
+  networking = {
+    networkmanager.enable = lib.mkDefault false;
+    useDHCP = lib.mkDefault true;
+    nftables.enable = lib.mkDefault true;
+  };
   users.users.root = {
     initialHashedPassword = "$y$j9T$3YEmKQGneWxEvwnkfNVqx1$IWrh4Yx8e.tl04wc/q0Ht1Xkj2kKiAoy41tcECuRsc.";
     openssh.authorizedKeys.keys = sshKeys;
@@ -29,11 +31,11 @@ in {
   };
 
   services = {
+    smartd.enable = true;
     openssh = {
       enable = true;
-      openFirewall = true;
       ports = [
-        sshPort
+        22
       ];
       settings = {
         PasswordAuthentication = false;
