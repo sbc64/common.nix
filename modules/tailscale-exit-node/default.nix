@@ -1,14 +1,14 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib; let
   cfg = config.services.tailscale;
-  isNetworkd = config.networking.useNetworkd;
-  authKey = "tskey-auth-kjt4m73cntrl-fg2dknbw86yibbvbh9z66yt289wlcfyay";
 in {
+  age.secrets."tsAuthKey" = {
+    file = "${callingFlakePath}/secrets/tailscale-auth.age";
+  };
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "server";
@@ -26,7 +26,7 @@ in {
     script = ''
       status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
       if [[ $status != Connected* ]]; then
-        ${cfg.package}/bin/tailscale up --auth-key ${authKey} ${escapeShellArgs cfg.extraUpFlags}
+        ${cfg.package}/bin/tailscale up --auth-key ${config.age.secrets.tsAuthKey.path} ${escapeShellArgs cfg.extraUpFlags}
       fi
     '';
   };
