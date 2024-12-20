@@ -82,8 +82,8 @@
         };
       };
 
-    nixosConfigurations = {
-      pi4Base = (libx self.outPath).mkHost {
+    nixosConfigurations = (libx self.outPath).mkHosts {
+      pi4Base = {
         inherit stateVersion;
         system = "aarch64-linux";
         hostname = "nixos";
@@ -95,8 +95,7 @@
           })
         ];
       };
-      vm = (libx self.outPath).mkHost {
-        hostname = "vm";
+      vm = {
         system = "aarch64-linux";
         inherit stateVersion;
         extraModules = [
@@ -107,7 +106,6 @@
         ];
       };
     };
-
     packages = {
       aarch64-darwin.vm = self.nixosConfigurations.vm.config.system.build.vm;
       aarch64-linux.pi4SDBase = self.nixosConfigurations.pi4Base.config.system.build.sdImage;
