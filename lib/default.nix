@@ -1,11 +1,12 @@
 {
   inputs,
-  outputs,
   stateVersion,
   lib,
-  ...
+  revInfo ? "",
+  moduleLocation,
 }: let
 in {
+  /*
   mkHome = {
     hostname,
     username,
@@ -19,6 +20,7 @@ in {
       };
       modules = [../home-manager];
     };
+    */
 
   mkHost = {
     hostname,
@@ -48,27 +50,29 @@ in {
           (
             if
               (builtins.pathExists
-                ../hosts/${hostname}/default.nix)
-            then ../hosts/${hostname}
+                "${moduleLocation}/hosts/${hostname}/default.nix")
+            then "${moduleLocation}/hosts/${hostname}"
             else {}
           )
           (
             if
               (builtins.pathExists
-                ../hosts/${hostname}/disk-config.nix)
+                "${moduleLocation}/hosts/${hostname}/disk-config.nix")
             then {
               imports = [
-                ../hosts/${hostname}/disk-config.nix
-                ../modules/zfs-common
+                "${moduleLocation}/hosts/${hostname}/disk-config.nix"
+                "${moduleLocation}/modules/zfs-common"
+                inputs.disko.nixosModules.disko
               ];
             }
             else {}
           )
-          (import ../hosts/common.nix {inherit pkgs lib;})
+          (import "${moduleLocation}/hosts/common.nix" {inherit pkgs lib;})
         ]
         ++ extraModules;
     };
-  mkHost = {
+
+  mkDeploy = {
     ipOrHostname,
     self,
     nixosConfiguration ? "",
@@ -138,7 +142,7 @@ in {
                   system =
                     (overrides.${name}.profiles.system or {})
                     // {
-                      path = deploy-rs.lib.${system}.activate.nixos host;
+                      path = self.inputs.deploy-rs.lib.${system}.activate.nixos host;
                     }
                     // lib.optionalAttrs (user != null) {
                       user = "root";
