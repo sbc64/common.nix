@@ -1,8 +1,8 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
+  callingFlakePath,
   ...
 }: let
   cfg = config.tailnet;
@@ -32,7 +32,7 @@ in {
   config = mkIf (cfg.enable) {
     services.tailscale.enable = true;
     age.secrets."tsAuthKey" = {
-      file = ../../../secrets/tailscale-auth.age;
+      file = "${callingFlakePath}/secrets/tailscale-auth.age";
     };
     networking = {
       firewall.trustedInterfaces = ["tailscale0"];
