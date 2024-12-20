@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   boot.loader.systemd-boot.configurationLimit = 25;
   nix = {
     package = pkgs.nixUnstable;
