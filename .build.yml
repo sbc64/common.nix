@@ -1,0 +1,18 @@
+image: alpine/edge
+secrets:
+  - dd136c92-7a78-4040-94fb-57379e508f0e
+sources:
+  - git+ssh://git@git.sr.ht/~sebohe/common.nix
+tasks:
+  - check: |
+      cd common.nix
+      if [ "$(git rev-parse origin/main)" != "$(git rev-parse HEAD)" ]; then \
+        complete-build; \
+      fi
+  - mirror: |
+      cd common.nix
+      git remote add github git@github.com:sbc64/common.nix.git
+      ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      git push github main
+
+
