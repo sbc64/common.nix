@@ -21,6 +21,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "stable";
     };
+    srvos.url = "github:nix-community/srvos";
   };
 
   outputs = {
@@ -49,6 +50,7 @@
       // {
         agenix = inputs.agenix.nixosModules.default;
         disko = inputs.disko.nixosModules.disko;
+        srvos = inputs.srvos.nixosModules;
         pi4Base = {lib, ...}: {
           imports = [
             "${stable}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
