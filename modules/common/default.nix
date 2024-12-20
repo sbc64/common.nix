@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  sshKeys = (import ../ssh-key);
+  sshKeys = import ../ssh-key;
   sshPort = 22;
 in {
   networking.useDHCP = lib.mkDefault true;
