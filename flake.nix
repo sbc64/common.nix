@@ -22,31 +22,7 @@
     nixosModules = {
       common = import ./modules/common.nix;
       cachix = import ./modules/cachix;
-      vm = {pkgs, ...}: {
-        #imports = ["${pkgs-darwin}/nixos/modules/virtualisation/qemu-vm.nix"];
-        # The tmpfs fileSystem idea is copied from the above quemu-vm module.
-        # The qemu-vm module only works on nixos system and does not work on
-        # darwin, which is why for darwin I just use the filesystems instead
-        fileSystems."/" = {
-          device = "tmpfs";
-          fsType = "tmpfs";
-        };
-        documentation.nixos.enable = false;
-        boot.loader.grub.device = "/dev/disk/by-label/nixos";
-        networking = {
-          useDHCP = false;
-          interfaces.eth0.useDHCP = true;
-        };
-        services.getty.autologinUser = "root";
-        security.sudo.wheelNeedsPassword = false;
-        # TODO figure out how to open ports to allow ssh access
-        virtualisation.vmVariant = {
-          virtualisation = {
-            host.pkgs = unstable.legacyPackages.aarch64-darwin;
-            graphics = false;
-          };
-        };
-      };
+      vm = import ./modules/vm;
     };
 
     nixosConfigurations.vm = mkHost {
@@ -55,6 +31,9 @@
       stateVersion = "24.05";
       extraModules = [
         self.nixosModules.vm
+        {
+          virtualisation.vmVariant.virtualisation.host.pkgs = unstable.legacyPackages.aarch64-darwin;
+        }
       ];
     };
     packages.aarch64-darwin.vm = self.nixosConfigurations.vm.config.system.build.vm;
