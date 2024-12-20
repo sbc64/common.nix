@@ -49,15 +49,10 @@ lib: libModules: callingFlakePath: rec {
         ++ extraModules;
     };
 
-  mergeIfNotExist = set1: set2: let
-    filteredSet2 = lib.filterAttrs (name: value: !builtins.hasAttr name set1) set2;
-  in
-    set1 // filteredSet2;
-
   mkHosts = configs:
     builtins.mapAttrs (
       name: value:
-        mkHost (mergeIfNotExist value {hostname = name;})
+        mkHost ({hostname = name;} // value)
     )
     configs;
 
@@ -68,11 +63,9 @@ lib: libModules: callingFlakePath: rec {
     deployments,
   }: let
     inherit (builtins) mapAttrs head filter;
-    buildOnTarget = v: mergeIfNotExist v {buildOnTarget = true;};
     filterHost = name: value: value.targetHost == name;
     crtDeploymentAttr = name: head (filter (v: v.targetHost == name) deployments);
     mvIp = deploy: builtins.removeAttrs (deploy // {targetHost = deploy.ip;}) ["ip"];
-
   in
     {
       meta = {
@@ -86,7 +79,7 @@ lib: libModules: callingFlakePath: rec {
         value._module.args.modules
         ++ [
           {
-            deployment = mvIp (buildOnTarget (crtDeploymentAttr name));
+            deployment = {buildOnTarget = true;} // mvIp (crtDeploymentAttr name);
           }
         ];
     })
