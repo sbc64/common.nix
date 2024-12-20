@@ -1,24 +1,26 @@
 { config
 , lib
-, pkgs
 , ...
 }:
 let
-
-  cfg = config.ts-sso;
+  cfg = config.builders-group;
   inherit (lib) mkOption types mkIf;
 in
 {
-  options.builder.group = {
+  options.builders-group = {
     enable = mkOption {
       type = types.bool;
       default = false;
     };
-    user = {
-      type = types.notNull or types.list;
+    include = mkOption {
+      type = types.listOf types.str;
+      default = [ "@wheel" "root" ]; #sudo users
     };
   };
   config = mkIf (cfg.enable) {
-    users.extragroups.builders.members = [ cfg.user ];
+    users.extraGroups.builders.members = cfg.include;
+    nix.settings = {
+      trusted-users = [ "@builders" "root" ];
+    };
   };
 }

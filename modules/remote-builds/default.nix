@@ -6,19 +6,19 @@
 }: let
   builderKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICllOC9xAgR6ROJSFotRNrfErKGayL+lVd0fjC3g3VtG";
 in {
-  users.groups.builder = {
+  users.groups.builders = {
     members = ["builder"];
   };
   users.users."builder" = {
     isNormalUser = true;
-    group = "builder";
+    group = "builders";
     openssh.authorizedKeys.keys = [
       builderKey
     ];
   };
   nix = {
     settings = {
-      trusted-users = ["@builder"];
+      trusted-users = ["@builders"];
       /*
       https://nixos.wiki/wiki/Distributed_build#Remote_builders.27_features
       Feature	Derivations requiring it
