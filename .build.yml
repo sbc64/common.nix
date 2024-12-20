@@ -13,6 +13,6 @@ tasks:
       cd common.nix
       git remote add github git@github.com:sbc64/common.nix.git
       ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-      git push -u github main
+      git push github main
 
 
