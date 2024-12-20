@@ -5,29 +5,44 @@
     # Leaving this URL to think about reducing the amount of nixpkgs
     # and try to make a lean lib usage here
     #nixpkgs-lib.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     # This current implementation likely leaves too many copies of nixpkgs everywhere
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    #pkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "unstable";
+    };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "unstable";
+    };
+    deploy-rs.url = "github:serokell/deploy-rs/724463b5a94daa810abfc64a4f87faef4e00f984";
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "unstable";
+    };
   };
 
   outputs = {
     self,
     unstable,
+    ...
   } @ inputs: let
-    libx = import ./lib unstable.lib;
-    lib = unstable.lib;
-    mkHost = (libx self.outPath inputs).mkHost;
+    lib = import ./lib unstable.lib;
+    inherit (unstable.lib) genAttrs filterAttrs;
   in {
-    lib = libx;
+    # TODO extend the standard library to include your personal functions, that
+    # way you only use the extended library in all your other repos
+    inherit lib;
     nixosModules = let
       folder = ./modules;
       toImport = name: (import "${folder}/${name}");
       filterModules = _: value: value == "directory";
-      names = builtins.attrNames (lib.filterAttrs filterModules (builtins.readDir folder));
+      names = builtins.attrNames (filterAttrs filterModules (builtins.readDir folder));
     in
-      lib.genAttrs names toImport;
-    nixosConfigurations.vm = mkHost {
+      genAttrs names toImport;
+
+    nixosConfigurations.vm = (lib self.nixosModules self.outPath).mkHost {
       hostname = "vm";
       system = "aarch64-linux";
       stateVersion = "24.05";
