@@ -12,7 +12,7 @@ in {
     openssh.authorizedKeys.keys = sshKeys;
   };
   hardware.cpu.amd.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux      ";
+  hardware.cpu.intel.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
 
   programs.neovim = {
     enable = true;
