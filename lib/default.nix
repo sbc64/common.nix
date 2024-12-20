@@ -68,7 +68,9 @@ lib: libModules: callingFlakePath: rec {
             }
             else {}
           )
-          libModules.common
+          libModules.minimal
+          libModules.nixpkgs
+          libModules.tmux
           libModules.agenix
         ]
         ++ extraModules;
