@@ -38,16 +38,31 @@ in {
     services.tailscale = {
       package = pkgs.tailscaleUnstable;
       enable = true;
-      extraUpFlags = [
-        (lib.optionalString cfg.allowSSH "--ssh")
-        (lib.optionalString (cfg.exitNode != "") "--exit-node=${cfg.exitNode}")
-        (lib.optionalString cfg.allowLanAccess "--exit-node-allow-lan-access=true")
-      ];
+      extraUpFlags =
+        []
+        ++ (
+          if (cfg.allowSSH)
+          then ["--ssh"]
+          else []
+        )
+        ++ (
+          if (cfg.exitNode != "")
+          then ["--exit-node=${cfg.exitNode}"]
+          else []
+        )
+        ++ (
+          if (cfg.allowLanAccess)
+          then ["--exit-node-allow-lan-access=true"]
+          else []
+        );
+
       authKeyFile = config.age.secrets.tsAuthKey.path;
       useRoutingFeatures = "client";
     };
     age.secrets."tsAuthKey" = {
       file = "${callingFlakePath}/secrets/tailscale-auth.age";
+      path = "/run/tsAuthKey";
+      symlink = false;
     };
     networking = {
       firewall.trustedInterfaces = ["tailscale0"];

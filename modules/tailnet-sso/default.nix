@@ -41,6 +41,8 @@ in {
       socketPath = "/run/ts.sock";
       group = cfg.group;
     };
+    # Why do these ports need to be open?
+    # is it for letsencrypt to enable the domain for tailscale?
     networking.firewall.interfaces."${cfg.interface}".allowedTCPPorts = [
       80
       443
