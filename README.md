@@ -4,3 +4,9 @@ This repository is a small library of `nixos` modules I made for myself and help
 
 
 GitHub is mirror, the repository is located at [sr.ht](https://git.sr.ht/~sebohe/common.nix).
+
+## TODO
+
+- [ ] Create a wrapped nvim based on this: https://github.com/pete3n/nixvim-flake/blob/main/flake.nix#L46
+- [ ] Create a tui module that has the different you need for your development environment
+
