@@ -79,8 +79,6 @@ in {
             --reset \
             --auth-key file:${config.age.secrets.tsAuthKey.path} \
             ${lib.optionalString cfg.allowSSH "--ssh"} \
-            ${lib.optionalString (cfg.exitNode != "") "--exit-node=${cfg.exitNode}"} \
-            --exit-node-allow-lan-access=${builtins.toString cfg.allowLanAccess}
         '';
       };
     })
