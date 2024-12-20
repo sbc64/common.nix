@@ -7,35 +7,34 @@
     # and try to make a lean lib usage here
     #nixpkgs-lib.url = "github:NixOS/nixpkgs/nixos-unstable";
     # This current implementation likely leaves too many copies of nixpkgs everywhere
-    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     stable.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "stable";
     };
     agenix = {
       url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "stable";
     };
     disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "stable";
     };
   };
 
   outputs = {
     self,
-    unstable,
     stable,
     ...
   } @ inputs: let
-    libx = import ./lib unstable.lib self.nixosModules;
+    libx = import ./lib stable.lib self.nixosModules;
     stateVersion = "23.11";
   in {
     # TODO extend the standard library to include your personal functions, that
     # way you only use the extended library in all your other repos
     lib = libx;
-    nixosModules = with unstable.lib; let
+    nixosModules = with stable.lib; let
       folder = ./modules;
       toImport = name: (import "${folder}/${name}");
       filterModules = _: value: value == "directory";
@@ -50,16 +49,15 @@
       // {
         agenix = inputs.agenix.nixosModules.default;
         disko = inputs.disko.nixosModules.disko;
-        pi4Base = {...}: {
+        pi4Base = {lib, ...}: {
           imports = [
             "${stable}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             "${stable}/nixos/modules/installer/cd-dvd/channel.nix"
-            self.nixosModules.common
           ];
           networking = {
             wireless = {
               enable = true;
-              networks."Atila".psk = "atilaeluno9395";
+              networks."Atila".psk = "???????????";
             };
           };
           system.activationScripts.installConfiguration = ''
@@ -80,8 +78,12 @@
         inherit stateVersion;
         system = "aarch64-linux";
         hostname = "nixos";
-        extraModules = [
-          self.nixosModules.pi4Base
+        extraModules = with self.nixosModules; [
+          pi4Base
+          ({lib, ...}: {
+            # This follows the dvd boot installer
+            boot.loader.grub.enable = lib.mkForce false;
+          })
         ];
       };
       vm = (libx self.outPath).mkHost {
@@ -91,7 +93,7 @@
         extraModules = [
           self.nixosModules.vm
           {
-            virtualisation.vmVariant.virtualisation.host.pkgs = unstable.legacyPackages.aarch64-darwin;
+            virtualisation.vmVariant.virtualisation.host.pkgs = stable.legacyPackages.aarch64-darwin;
           }
         ];
       };
@@ -104,7 +106,7 @@
     apps.aarch64-darwin.default = {
       type = "app";
       program = "${
-        unstable.legacyPackages.aarch64-darwin.writeShellScript "run-vm.sh" ''
+        stable.legacyPackages.aarch64-darwin.writeShellScript "run-vm.sh" ''
           export NIX_DISK_IMAGE=$(mktemp -u -t vm.qcow2)
           echo "IMAGE PATH $NIX_DISK_IMAGE"
           trap "rm -f $NIX_DISK_IMAGE" EXIT
