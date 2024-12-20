@@ -14,7 +14,7 @@ lib: libModules: callingFlakePath: rec {
       modules =
         [
           {
-            networking.hostName = lib.mkDefault hostname;
+            networking.hostName = lib.mkForce hostname;
             networking.hostId = lib.mkDefault (builtins.substring 0 8 (
               builtins.hashString "md5" hostname
             ));
@@ -67,7 +67,12 @@ lib: libModules: callingFlakePath: rec {
     nixpkgs,
     deployments,
   }: let
-    inherit (builtins) mapAttrs elemAt filter;
+    inherit (builtins) mapAttrs head filter;
+    buildOnTarget = v: mergeIfNotExist v {buildOnTarget = true;};
+    filterHost = name: value: value.targetHost == name;
+    crtDeploymentAttr = name: head (filter (v: v.targetHost == name) deployments);
+    mvIp = deploy: builtins.removeAttrs (deploy // {targetHost = deploy.ip;}) ["ip"];
+
   in
     {
       meta = {
@@ -81,7 +86,7 @@ lib: libModules: callingFlakePath: rec {
         value._module.args.modules
         ++ [
           {
-            deployment = mergeIfNotExist (elemAt (filter (v: v.targetHost == name) deployments) 0) {buildOnTarget = true;};
+            deployment = mvIp (buildOnTarget (crtDeploymentAttr name));
           }
         ];
     })
