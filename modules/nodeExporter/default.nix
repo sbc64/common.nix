@@ -1,11 +1,12 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config
+, lib
+, ...
+}:
+let
   cfg = config.nodeExporter;
   inherit (lib) mkIf types mkMerge mkOption mkDefault;
-in {
+in
+{
   options.nodeExporter = {
     enable = mkOption {
       type = types.bool;
@@ -32,7 +33,7 @@ in {
         exporters = {
           node = {
             enable = true;
-            enabledCollectors = ["systemd"];
+            enabledCollectors = [ "systemd" ];
             port = cfg.port;
             listenAddress = "127.0.0.1";
           };

@@ -1,12 +1,13 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config
+, lib
+, ...
+}:
+let
   cfg = config.tailnet-ssh;
   sshPort = builtins.elemAt config.services.openssh.ports 0;
   inherit (lib) mkIf types mkOption;
-in {
+in
+{
   options.tailnet-ssh = {
     enable = mkOption {
       type = types.bool;

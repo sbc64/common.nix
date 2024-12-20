@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   #imports = ["${pkgs-darwin}/nixos/modules/virtualisation/qemu-vm.nix"];
   # The tmpfs fileSystem idea is copied from the above quemu-vm module.
   # The qemu-vm module only works on nixos system and does not work on

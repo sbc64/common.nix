@@ -1,11 +1,11 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 with lib; let
   cfg = config.services.tailscale;
-in {
+in
+{
   age.secrets."tsAuthKey" = {
     file = "${callingFlakePath}/secrets/tailscale-auth.age";
     path = "/run/tsAuthKey";
@@ -19,9 +19,9 @@ in {
     ];
   };
   systemd.services.tailscaled-autoconnect = {
-    after = ["tailscale.service"];
-    wants = ["tailscale.service"];
-    wantedBy = ["multi-user.target"];
+    after = [ "tailscale.service" ];
+    wants = [ "tailscale.service" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
     };

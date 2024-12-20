@@ -1,13 +1,14 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
+{ config
+, lib
+, pkgs
+, ...
+}:
+let
   builderKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICllOC9xAgR6ROJSFotRNrfErKGayL+lVd0fjC3g3VtG";
-in {
+in
+{
   users.groups.builders = {
-    members = ["builder"];
+    members = [ "builder" ];
   };
   users.users."builder" = {
     isNormalUser = true;
@@ -18,7 +19,7 @@ in {
   };
   nix = {
     settings = {
-      trusted-users = ["@builders"];
+      trusted-users = [ "@builders" ];
       /*
       https://nixos.wiki/wiki/Distributed_build#Remote_builders.27_features
       Feature	Derivations requiring it

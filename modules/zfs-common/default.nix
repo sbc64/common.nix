@@ -1,18 +1,19 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config
+, lib
+, ...
+}:
+let
   cfg = config.disko-zfs;
   inherit (lib) mkIf mkForce mkDefault mkEnableOption;
-in {
+in
+{
   options.disko-zfs.enable = mkEnableOption "enable zfs with disko";
   config = mkIf (cfg.enable) {
     boot = {
       kernelPackages =
         mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
-      supportedFilesystems = ["zfs"];
-      initrd.supportedFilesystems = ["zfs"];
+      supportedFilesystems = [ "zfs" ];
+      initrd.supportedFilesystems = [ "zfs" ];
 
       zfs = {
         # needed because /dev/disk/by-id is empty in qemu-vms

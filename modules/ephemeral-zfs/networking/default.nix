@@ -1,11 +1,12 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config
+, lib
+, ...
+}:
+let
   cfg = config.zfs-root.networking;
   inherit (lib) types mkDefault mkOption;
-in {
+in
+{
   options.zfs-root.networking = {
     hostName = mkOption {
       description = "The name of the machine.  Used by nix flake.";

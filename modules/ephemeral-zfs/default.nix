@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }: {
-  imports = [./boot ./fileSystems ./networking];
+  imports = [ ./boot ./fileSystems ./networking ];
 }

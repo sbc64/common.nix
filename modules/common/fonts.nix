@@ -1,5 +1,5 @@
 # you only need this package when you have a UI
-{pkgs, ...}: {
+{ pkgs, ... }: {
   fonts.fontDir.enable = true;
   fonts.packages = with pkgs; [
     (nerdfonts.override {

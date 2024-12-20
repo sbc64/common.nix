@@ -8,6 +8,7 @@ let
       #builder
     ]
     ++ mbpMe;
-in {
+in
+{
   "me".publicKeys = me;
 }

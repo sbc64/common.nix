@@ -1,11 +1,12 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config
+, lib
+, ...
+}:
+let
   cfg = config.ts-sso;
   inherit (lib) mkOption types mkIf;
-in {
+in
+{
   options.ts-sso = {
     enable = mkOption {
       type = types.bool;

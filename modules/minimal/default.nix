@@ -1,10 +1,11 @@
-{
-  lib,
-  pkgs,
-  ...
-}: let
+{ lib
+, pkgs
+, ...
+}:
+let
   sshKeys = import ../ssh-key;
-in {
+in
+{
   users.users.root = {
     # TODO hashedPasswordFile = config.age.secrets.bemeurerPassword.path;
     #initialHashedPassword = "$y$j9T$B6t8OsusxnuUA6rZVUtp11$VloSf3w9NcebBTq4ZNsug8fGTzsTgSgW/qDJgMb6AN2";
@@ -19,13 +20,15 @@ in {
     viAlias = true;
     vimAlias = true;
   };
-  boot = let
-    modules = ["xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
-  in {
-    initrd.availableKernelModules = modules;
-    kernelModules = modules;
-    loader.timeout = lib.mkForce 5;
-  };
+  boot =
+    let
+      modules = [ "xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
+    in
+    {
+      initrd.availableKernelModules = modules;
+      kernelModules = modules;
+      loader.timeout = lib.mkForce 5;
+    };
   networking = {
     networkmanager.enable = lib.mkDefault false;
     useDHCP = lib.mkDefault true;

@@ -1,34 +1,37 @@
 # https://github.com/otavio/nix-config/blob/acd39f39b97677e1bd7aadf542fc41c334b1890d/lib/default.nix#L4-L13
 lib: libModules: callingFlakePath: rec {
-  mkSecret = name: {
-    secretDir,
-    dir ? "/run/agenix",
-    path ? "${dir}/${name}",
-    symlink ? true,
-    mode ? "0400",
-    group ? "0",
-    owner ? "0",
-  }: {
+  mkSecret = name: { secretDir
+                   , dir ? "/run/agenix"
+                   , path ? "${dir}/${name}"
+                   , symlink ? true
+                   , mode ? "0400"
+                   , group ? "0"
+                   , owner ? "0"
+                   ,
+                   }: {
     file = "${secretDir}/${name}.age";
     inherit name path symlink mode group owner;
   };
 
   mkSecrets = secrets:
-    builtins.mapAttrs (
-      name: value:
-        mkSecret name value
-    )
-    secrets;
+    builtins.mapAttrs
+      (
+        name: value:
+          mkSecret name value
+      )
+      secrets;
 
-  mkHost = {
-    hostname,
-    stateVersion,
-    inputs ? {},
-    system ? "x86_64-linux",
-    extraModules ? [],
-  }: let
-    libx = inputs.libx.lib callingFlakePath;
-  in
+  mkHost =
+    { hostname
+    , stateVersion
+    , inputs ? { }
+    , system ? "x86_64-linux"
+    , extraModules ? [ ]
+    ,
+    }:
+    let
+      libx = inputs.libx.lib callingFlakePath;
+    in
     lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -50,7 +53,7 @@ lib: libModules: callingFlakePath: rec {
               (builtins.pathExists
                 "${callingFlakePath}/hosts/${hostname}/default.nix")
             then "${callingFlakePath}/hosts/${hostname}"
-            else {}
+            else { }
           )
           (
             if
@@ -64,7 +67,7 @@ lib: libModules: callingFlakePath: rec {
               ];
               disko-zfs.enable = lib.mkDefault true;
             }
-            else {}
+            else { }
           )
           libModules.minimal
           libModules.nix
@@ -76,30 +79,34 @@ lib: libModules: callingFlakePath: rec {
     };
 
   mkHosts = configs:
-    builtins.mapAttrs (
-      name: value:
-        mkHost ({hostname = name;} // value)
-    )
-    configs;
+    builtins.mapAttrs
+      (
+        name: value:
+          mkHost ({ hostname = name; } // value)
+      )
+      configs;
 
-  mkColmena = {
-    description ? "",
-    configurations,
-    nixpkgs,
-    deployments,
-  }: let
-    inherit (builtins) mapAttrs;
+  mkColmena =
+    { description ? ""
+    , configurations
+    , nixpkgs
+    , deployments
+    ,
+    }:
+    let
+      inherit (builtins) mapAttrs;
 
-    renameAttr = oldName: newName: set:
-      if builtins.hasAttr oldName set
-      then let
-        value = set.${oldName};
-      in
-        builtins.removeAttrs set [oldName] // {${newName} = value;}
-      else set;
+      renameAttr = oldName: newName: set:
+        if builtins.hasAttr oldName set
+        then
+          let
+            value = set.${oldName};
+          in
+          builtins.removeAttrs set [ oldName ] // { ${newName} = value; }
+        else set;
 
-    mvIp = deploy: renameAttr "ip" "targetHost" deploy;
-  in
+      mvIp = deploy: renameAttr "ip" "targetHost" deploy;
+    in
     {
       meta = {
         inherit description nixpkgs;
@@ -107,19 +114,20 @@ lib: libModules: callingFlakePath: rec {
         nodeSpecialArgs = mapAttrs (name: value: value._module.specialArgs) configurations;
       };
     }
-    // mapAttrs (name: value: {
-      imports =
-        [
-          {
-            deployment =
-              {
-                buildOnTarget = true;
-                targetHost = name;
-              }
-              // mvIp value;
-          }
-        ]
-        ++ configurations.${name}._module.args.modules;
-    })
-    deployments;
+    // mapAttrs
+      (name: value: {
+        imports =
+          [
+            {
+              deployment =
+                {
+                  buildOnTarget = true;
+                  targetHost = name;
+                }
+                // mvIp value;
+            }
+          ]
+          ++ configurations.${name}._module.args.modules;
+      })
+      deployments;
 }

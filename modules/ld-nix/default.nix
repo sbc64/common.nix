@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   pogram.nix-ld = {
     enable = true;
     libraries = with pkgs; [

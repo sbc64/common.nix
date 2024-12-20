@@ -1,13 +1,14 @@
-wifiname: {
-  config,
-  lib,
-  callingFlakePath,
-  ...
-}: let
+wifiname: { config
+          , lib
+          , callingFlakePath
+          , ...
+          }:
+let
   cfg = config.within.wireless;
   sshPort = builtins.elemAt config.services.openssh.ports 0;
   inherit (lib) mkIf mkOption types;
-in {
+in
+{
   options.within.wireless = {
     enable = mkOption {
       type = types.bool;

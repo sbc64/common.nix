@@ -1,14 +1,15 @@
-{
-  config,
-  lib,
-  pkgs,
-  callingFlakePath,
-  inputs,
-  ...
-}: let
+{ config
+, lib
+, pkgs
+, callingFlakePath
+, inputs
+, ...
+}:
+let
   cfg = config.tailnet;
   inherit (lib) mkIf types mkOption;
-in {
+in
+{
   options.tailnet = {
     enable = mkOption {
       type = types.bool;
@@ -39,21 +40,21 @@ in {
       package = pkgs.tailscaleUnstable;
       enable = true;
       extraUpFlags =
-        []
+        [ ]
         ++ (
           if (cfg.allowSSH)
-          then ["--ssh"]
-          else []
+          then [ "--ssh" ]
+          else [ ]
         )
         ++ (
           if (cfg.exitNode != "")
-          then ["--exit-node=${cfg.exitNode}"]
-          else []
+          then [ "--exit-node=${cfg.exitNode}" ]
+          else [ ]
         )
         ++ (
           if (cfg.allowLanAccess)
-          then ["--exit-node-allow-lan-access=true"]
-          else []
+          then [ "--exit-node-allow-lan-access=true" ]
+          else [ ]
         );
 
       authKeyFile = config.age.secrets.tsAuthKey.path;
@@ -65,8 +66,8 @@ in {
       symlink = false;
     };
     networking = {
-      firewall.trustedInterfaces = ["tailscale0"];
-      firewall.allowedUDPPorts = [config.services.tailscale.port];
+      firewall.trustedInterfaces = [ "tailscale0" ];
+      firewall.allowedUDPPorts = [ config.services.tailscale.port ];
     };
   };
 }
