@@ -34,6 +34,8 @@
   in {
     # TODO extend the standard library to include your personal functions, that
     # way you only use the extended library in all your other repos
+    # one way to do it is like this:
+    # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/flake.nix
     lib = libx;
     nixosModules = with stable.lib; let
       folder = ./modules;
