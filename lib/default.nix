@@ -63,7 +63,6 @@ lib: libModules: callingFlakePath: rec {
     deployments,
   }: let
     inherit (builtins) mapAttrs head filter;
-    crtDeploymentAttr = name: head (filter (v: v.targetHost == name) deployments);
 
     renameAttr = oldName: newName: set:
       if builtins.hasAttr oldName set
@@ -74,6 +73,7 @@ lib: libModules: callingFlakePath: rec {
       else set;
 
     mvIp = deploy: renameAttr "ip" "targetHost" deploy;
+
   in
     {
       meta = {
@@ -84,12 +84,17 @@ lib: libModules: callingFlakePath: rec {
     }
     // mapAttrs (name: value: {
       imports =
-        value._module.args.modules
+        configurations.${name}._module.args.modules
         ++ [
           {
-            deployment = {buildOnTarget = true;} // mvIp (crtDeploymentAttr name);
+            deployment =
+              {
+                buildOnTarget = true;
+                targetHost = name;
+              }
+              // mvIp value;
           }
         ];
     })
-    configurations;
+    deployments;
 }
