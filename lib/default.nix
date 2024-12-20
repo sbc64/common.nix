@@ -1,19 +1,16 @@
 lib: libModules: callingFlakePath: rec {
   mkSecret = name: {
     secretDir,
-    default ? {
-      path = "/run/agenix/${name}";
-      symlink = true;
-      mode = "0400";
-      group = "0";
-      owner = "0";
-    },
-  }:
-    default
-    // {
-      file = "${secretDir}/${name}.age";
-      inherit name;
-    };
+    dir ? "/run/agenix",
+    path ? "${dir}/${name}",
+    symlink ? true,
+    mode ? "0400",
+    group ? "0",
+    owner ? "0",
+  }: {
+    file = "${secretDir}/${name}.age";
+    inherit name path symlink mode group owner;
+  };
 
   mkSecrets = secrets:
     builtins.mapAttrs (
