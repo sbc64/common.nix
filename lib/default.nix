@@ -67,7 +67,7 @@ lib: libModules: callingFlakePath: rec {
             else {}
           )
           libModules.minimal
-          libModules.nixpkgs
+          libModules.nix
           libModules.tmux
           libModules.agenix
           libModules.tsUnstable
