@@ -59,16 +59,25 @@
               enable = true;
               networks."Atila".psk = "???????????";
             };
+            hostId = "8d0986db"; #worthy-elk
           };
           system.activationScripts.installConfiguration = ''
              if [ ! -f /etc/nixos/configuration.nix ]; then
                  mkdir -p /etc/nixos
             fi
           '';
-          #cp -r ${./nixos}/* /etc/nixos
-          fileSystems."/" = {
-            device = "/dev/disk/by-label/NIXOS_SD";
-            fsType = "ext4";
+
+          sdImage.firmwareSize = 5000;
+          fileSystems = {
+            "/boot/firmware" = {
+              device = "/dev/disk/by-label/FIRMWARE";
+              fsType = "vfat";
+              options = ["nofail" "noauto"];
+            };
+            "/" = {
+              device = "/dev/disk/by-label/NIXOS_SD";
+              fsType = "ext4";
+            };
           };
         };
       };
