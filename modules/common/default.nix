@@ -32,7 +32,7 @@ in {
   };
 
   services = {
-    smartd.enable = true;
+    smartd.enable = lib.mkDefault true;
     openssh = {
       enable = true;
       ports = [
