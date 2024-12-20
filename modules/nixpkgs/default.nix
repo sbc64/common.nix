@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   boot.loader.systemd-boot.configurationLimit = 25;
   nix = {
-    package = pkgs.nixUnstable;
+    package = pkgs.nixVersions.stable;
     settings = {
       trusted-users = ["root" "@admin" "@wheel"];
       substituters = [
