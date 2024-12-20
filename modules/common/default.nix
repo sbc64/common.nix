@@ -6,6 +6,9 @@
   sshKeys = import ../ssh-key;
   sshPort = 22;
 in {
+  imports = [
+    ../nixpkgs
+  ];
   networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = false;
   users.users.root = {
@@ -36,22 +39,6 @@ in {
         AllowStreamLocalForwarding = false;
       };
       allowSFTP = false;
-    };
-  };
-  nix = {
-    settings = {
-      substituters = [
-        "https://devenv.cachix.org"
-        "https://cache.nixos.org/"
-        "https://nix-community.cachix.org"
-      ];
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      ];
-      trusted-users = ["root"];
-      experimental-features = ["nix-command" "flakes"];
     };
   };
   security = {
