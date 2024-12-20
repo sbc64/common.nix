@@ -7,7 +7,7 @@
   ...
 }: let
   cfg = config.tailnet;
-  inherit (lib) mkIf types mkOption mkMerge;
+  inherit (lib) mkIf types mkOption;
 in {
   options.tailnet = {
     enable = mkOption {

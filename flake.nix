@@ -47,9 +47,7 @@
     in
       modules
       // {
-        tsUnstable = {
-          ...
-        }: {
+        tsUnstable = {...}: {
           nixpkgs.overlays = [
             (final: prev: {
               tailscaleUnstable = inputs.unstable.legacyPackages.${prev.system}.tailscale;
