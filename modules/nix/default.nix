@@ -1,10 +1,12 @@
-{pkgs, lib, ...}: {
+{ pkgs, lib, ... }: {
   boot.loader.systemd-boot.configurationLimit = 25;
-  nixpkgs.allowUnfree = lib.mkDefault true;
+  nixpkgs.config = {
+    allowUnfree = lib.mkDefault true;
+  };
   nix = {
     package = lib.mkDefault pkgs.nixVersions.stable;
     settings = {
-      trusted-users = [ "@builders" "@wheel"];
+      trusted-users = [ "@builders" "@wheel" ];
       extra-substituters = [
         "https://devenv.cachix.org"
         "https://cache.nixos.org/"
@@ -19,7 +21,7 @@
         "nixos-dash-docset.cachix.org-1:CTP+Rqm1pnWU0lFaCdnN3wZmGkVnB/xoTV/SQ4T1gAU="
         "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
       ];
-      extra-experimental-features = ["nix-command" "flakes"];
+      extra-experimental-features = [ "nix-command" "flakes" ];
     };
     extraOptions = ''
       keep-outputs = true
