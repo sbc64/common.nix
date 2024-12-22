@@ -7,27 +7,27 @@
     # and try to make a lean lib usage here
     #nixpkgs-lib.url = "github:NixOS/nixpkgs/nixos-unstable";
     # This current implementation likely leaves too many copies of nixpkgs everywhere
-    pkgs2411.url = "github:NixOS/nixpkgs/nixos-24.11";
+    latestRelease.url = "github:NixOS/nixpkgs/nixos-24.11";
     unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "unstable";
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "latestRelease";
     };
     agenix = {
       url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "pkgs2411";
+      inputs.nixpkgs.follows = "latestRelease";
     };
     disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "pkgs2411";
+      inputs.nixpkgs.follows = "latestRelease";
     };
     srvos.url = "github:nix-community/srvos";
   };
 
   outputs =
     { self
-    , pkgs2411
+    , latestRelease
     , ...
     } @ inputs:
     let
@@ -35,12 +35,12 @@
       # way you only use the extended library in all your other repos
       # one way to do it is like this:
       # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/flake.nix
-      libx = import ./lib pkgs2411.lib self.nixosModules;
-      stateVersion = "24.05";
+      libx = import ./lib latestRelease.lib self.nixosModules;
+      stateVersion = "24.11";
     in
     {
       lib = libx;
-      nixosModules = with pkgs2411.lib; let
+      nixosModules = with latestRelease.lib; let
         folder = ./modules;
         toImport = name: (import "${folder}/${name}");
         filterModules = _: value: value == "directory";
@@ -62,8 +62,8 @@
         home-manager = inputs.home-manager.nixosModules.home-manager;
         pi4Base = { lib, ... }: {
           imports = [
-            "${pkgs2411}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            "${pkgs2411}/nixos/modules/installer/cd-dvd/channel.nix"
+            "${latestRelease}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            "${latestRelease}/nixos/modules/installer/cd-dvd/channel.nix"
           ];
           networking = {
             wireless = {
@@ -111,7 +111,7 @@
           extraModules = [
             self.nixosModules.vm
             {
-              virtualisation.vmVariant.virtualisation.host.pkgs = pkgs2411.legacyPackages.aarch64-darwin;
+              virtualisation.vmVariant.virtualisation.host.pkgs = latestRelease.legacyPackages.aarch64-darwin;
             }
           ];
         };
@@ -123,7 +123,7 @@
       apps.aarch64-darwin.default = {
         type = "app";
         program = "${
-        pkgs2411.legacyPackages.aarch64-darwin.writeShellScript "run-vm.sh" ''
+        latestRelease.legacyPackages.aarch64-darwin.writeShellScript "run-vm.sh" ''
           export NIX_DISK_IMAGE=$(mktemp -u -t vm.qcow2)
           echo "IMAGE PATH $NIX_DISK_IMAGE"
           trap "rm -f $NIX_DISK_IMAGE" EXIT
