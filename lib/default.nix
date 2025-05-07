@@ -35,7 +35,7 @@ lib: libModules: callingFlakePath: rec {
     lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit inputs callingFlakePath libx;
+        inherit inputs libModules callingFlakePath libx;
       };
       modules =
         [
@@ -73,7 +73,6 @@ lib: libModules: callingFlakePath: rec {
           libModules.nix
           libModules.tmux
           libModules.agenix
-          libModules.tsUnstable
         ]
         ++ extraModules;
     };

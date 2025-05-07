@@ -1,7 +1,8 @@
 { pkgs, lib, ... }: {
-  boot.loader.systemd-boot.configurationLimit = 25;
   nixpkgs.config = {
     allowUnfree = lib.mkDefault true;
+    allowUnsupportedSystem = lib.mkDefault true;
+    allowBroken = lib.mkDefault true;
   };
   nix = {
     package = lib.mkDefault pkgs.nixVersions.stable;
@@ -25,6 +26,6 @@
       keep-derivations = true
     '';
     # If set to true it will delete system profiles from the boot
-    gc.automatic = false;
+    gc.automatic = lib.mkDefault false;
   };
 }

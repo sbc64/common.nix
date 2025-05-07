@@ -1,34 +1,31 @@
 { config
 , lib
+, libModules
 , ...
 }:
 let
   cfg = config.disko-zfs;
-  inherit (lib) mkIf mkForce mkDefault mkEnableOption;
+  inherit (lib) mkIf mkDefault mkEnableOption;
 in
 {
   options.disko-zfs.enable = mkEnableOption "enable zfs with disko";
-  config = mkIf (cfg.enable) {
+  imports = [
+    libModules.srvos.mixins-latest-zfs-kernel
+  ];
+  config = mkIf cfg.enable {
     boot = {
-      kernelPackages =
-        mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
       supportedFilesystems = [ "zfs" ];
       initrd.supportedFilesystems = [ "zfs" ];
-
       zfs = {
         # needed because /dev/disk/by-id is empty in qemu-vms
         #zfs.devNodes = "/dev/disk/by-uuid";
         forceImportRoot = mkDefault false;
       };
       loader = {
+        systemd-boot.enable = lib.mkDefault true;
+        timeout = 5;
+        efi.canTouchEfiVariables = lib.mkDefault false; # Set to true on install
         generationsDir.copyKernels = true;
-        grub = {
-          enable = mkDefault true;
-          copyKernels = true;
-          efiSupport = true;
-          zfsSupport = true;
-          efiInstallAsRemovable = mkDefault true;
-        };
       };
     };
   };

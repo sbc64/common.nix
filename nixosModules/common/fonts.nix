@@ -1,6 +1,11 @@
 # you only need this package when you have a UI
 { pkgs, ... }: {
   fonts.fontDir.enable = true;
+  fonts.fontconfig.defaultFonts = {
+    emoji = "Twitter Color Emoji";
+
+
+  };
   fonts.packages = with pkgs; [
     (nerdfonts.override {
       fonts = [

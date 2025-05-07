@@ -37,7 +37,6 @@ in
   };
   config = mkIf (cfg.enable) {
     services.tailscale = {
-      package = pkgs.tailscaleUnstable;
       enable = true;
       extraUpFlags =
         [ ]

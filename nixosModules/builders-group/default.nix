@@ -10,11 +10,11 @@ in
   options.builders-group = {
     enable = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
     };
     include = mkOption {
       type = types.listOf types.str;
-      default = [ "@wheel" "root" ]; #sudo users
+      default = [ ];
     };
   };
   config = mkIf (cfg.enable) {

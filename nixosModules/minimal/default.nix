@@ -12,13 +12,12 @@ in
     hashedPassword = "$y$j9T$I/X.RtYltur4QwBNUOY800$4PTLxrXrQcbsar2vtigMzfAEP6/B0CRm.i3RtZNgIT3";
     openssh.authorizedKeys.keys = sshKeys;
   };
-  hardware.cpu.amd.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
-
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
+  hardware = {
+    cpu = {
+      amd.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
+      intel.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
+    };
+    enableRedistributableFirmware = true;
   };
   boot =
     let
@@ -39,7 +38,7 @@ in
     smartd.enable = lib.mkDefault false; # Create a backups module
     scrutiny.enable = lib.mkDefault false; # Move to a backups module
     openssh = {
-      enable = true;
+      enable = lib.mkDefault true;
       ports = [
         22
       ];
