@@ -8,8 +8,7 @@ in
 {
   users.users.root = {
     # TODO hashedPasswordFile = config.age.secrets.bemeurerPassword.path;
-    #initialHashedPassword = "$y$j9T$B6t8OsusxnuUA6rZVUtp11$VloSf3w9NcebBTq4ZNsug8fGTzsTgSgW/qDJgMb6AN2";
-    hashedPassword = "$y$j9T$I/X.RtYltur4QwBNUOY800$4PTLxrXrQcbsar2vtigMzfAEP6/B0CRm.i3RtZNgIT3";
+    hashedPassword = "$y$j9T$hYDwkMNHhGlsMYg0hjd7f.$CdonvHhW1s9NMfnGSRy0d2BHgLpYUb92hsvfFoyjKK2";
     openssh.authorizedKeys.keys = sshKeys;
   };
   hardware = {
@@ -21,7 +20,7 @@ in
   };
   boot =
     let
-      modules = [ "xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
+      modules = [ "uhci_hcd" "xen_blkfront" "ata_piix" "xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
     in
     {
       initrd.availableKernelModules = modules;
@@ -63,7 +62,7 @@ in
     inherit
       (pkgs)
       jq
-      htop
+      btop
       busybox
       wget
       ncdu

@@ -19,6 +19,7 @@ in
   config = mkIf cfg.enable {
     services.prometheus = {
       enable = true;
+      listenAddress = "127.0.0.1";
       globalConfig.scrape_interval = "10s"; # "1m"
       exporters.node = {
         #extraFlags = [ "--collector.ethtool" "--collector.softirqs" "--collector.tcpstat" "--collector.wifi" ];
@@ -35,6 +36,9 @@ in
     };
     services.grafana = {
       enable = true;
+      settings = {
+        auth.disable_login = true;
+      };
       provision.datasources.settings = {
         apiVersion = 1;
         datasources = [{
