@@ -8,7 +8,8 @@ in
 {
   users.users.root = {
     # TODO hashedPasswordFile = config.age.secrets.bemeurerPassword.path;
-    hashedPassword = "$y$j9T$hYDwkMNHhGlsMYg0hjd7f.$CdonvHhW1s9NMfnGSRy0d2BHgLpYUb92hsvfFoyjKK2";
+    initialHashedPassword = lib.mkForce null;
+    hashedPassword = lib.mkForce "$6$IqftJJaKOvqonuin$X5syEj/INOr1Dq2hF38l5i89zXM0xXmepdzeA/2Wf7z7vrjiMGYS/1sy8VtNnOiRvhu1T1TITLCsseVXXLH7f0";
     openssh.authorizedKeys.keys = sshKeys;
   };
   hardware = {
