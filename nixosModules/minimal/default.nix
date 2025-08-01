@@ -69,6 +69,9 @@ in
       ncdu
       fd
       glances
+      iperf3
+      dnsutils
+      fastfetch
       ;
   };
   programs = {
