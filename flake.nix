@@ -31,7 +31,7 @@
       # one way to do it is like this:
       # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/flake.nix
       libx = import ./lib unstable.lib self.nixosModules;
-      stateVersion = "25.05";
+      stateVersion = "25.11";
     in
     {
       lib = libx;
@@ -102,6 +102,18 @@
             {
               virtualisation.vmVariant.virtualisation.host.pkgs = unstable.legacyPackages.aarch64-darwin;
             }
+          ];
+        };
+        installerIso = rec {
+          inherit stateVersion;
+          hostname = "nixos-iso";
+          extraModules = [
+            ({ pkgs, modulesPath, lib, ... }: {
+              networking.hostId = lib.mkForce (builtins.substring 0 8 (
+                builtins.hashString "md5" hostname
+              ));
+              imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
+            })
           ];
         };
       };
