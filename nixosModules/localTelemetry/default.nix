@@ -37,7 +37,7 @@ in
     services.grafana = {
       enable = true;
       settings = {
-        auth.disable_login = true;
+        #auth.disable_login = true;
       };
       provision.datasources.settings = {
         apiVersion = 1;
