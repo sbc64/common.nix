@@ -24,7 +24,7 @@ in
       modules = [ "uhci_hcd" "xen_blkfront" "ata_piix" "xhci_pci" "ahci" "nvme" "uas" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
     in
     {
-      initrd.availableKernelModules = modules;
+      initrd.availableKernelModules = modules; # Reduce the scope of this to what is needed
       kernelModules = modules;
       loader.timeout = lib.mkForce 5;
     };
