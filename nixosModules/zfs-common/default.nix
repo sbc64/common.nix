@@ -22,7 +22,10 @@ in
         forceImportRoot = mkDefault false;
       };
       loader = {
-        systemd-boot.enable = lib.mkDefault true;
+        systemd-boot = {
+          enable = lib.mkDefault true;
+          consoleMode = "auto";
+        };
         timeout = 5;
         efi.canTouchEfiVariables = lib.mkDefault false; # Set to true on install
         generationsDir.copyKernels = true;
