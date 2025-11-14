@@ -1,7 +1,7 @@
 {
   description = "Common NixOS modules for my nix use cases";
   inputs = {
-    unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "unstable";

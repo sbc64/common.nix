@@ -24,7 +24,7 @@ in
       loader = {
         systemd-boot = {
           enable = lib.mkDefault true;
-          consoleMode = "auto";
+          consoleMode = "max";
         };
         timeout = 5;
         efi.canTouchEfiVariables = lib.mkDefault false; # Set to true on install
