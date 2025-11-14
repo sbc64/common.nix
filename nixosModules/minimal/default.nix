@@ -14,8 +14,8 @@ in
   };
   hardware = {
     cpu = {
-      amd.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
-      intel.updateMicrocode = pkgs.hostPlatform.system == "x86_64-linux";
+      amd.updateMicrocode = pkgs.stdenv.hostPlatform.system == "x86_64-linux";
+      intel.updateMicrocode = pkgs.stdenv.hostPlatform.system == "x86_64-linux";
     };
     enableRedistributableFirmware = true;
   };
