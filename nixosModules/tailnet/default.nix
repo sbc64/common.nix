@@ -1,8 +1,6 @@
 { config
 , lib
 , pkgs
-, callingFlakePath
-, inputs
 , ...
 }:
 let
@@ -10,6 +8,9 @@ let
   inherit (lib) mkIf types mkOption;
 in
 {
+  imports = [
+    ../tailscale-auth
+  ];
   options.tailnet = {
     enable = mkOption {
       type = types.bool;
@@ -60,11 +61,6 @@ in
         );
       authKeyFile = config.age.secrets.tsAuthKey.path;
       useRoutingFeatures = "client";
-    };
-    age.secrets."tsAuthKey" = {
-      file = "${callingFlakePath}/secrets/tailscale-auth.age";
-      path = "/run/tsAuthKey";
-      symlink = false;
     };
     networking = {
       firewall.trustedInterfaces = [ "tailscale0" ];
