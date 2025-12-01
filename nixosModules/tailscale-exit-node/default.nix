@@ -6,11 +6,9 @@ with lib; let
   cfg = config.services.tailscale;
 in
 {
-  age.secrets."tsAuthKey" = {
-    file = "${callingFlakePath}/secrets/tailscale-auth.age";
-    path = "/run/tsAuthKey";
-    symlink = false;
-  };
+  imports = [
+    ../tailscale-auth
+  ];
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "server";
