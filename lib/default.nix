@@ -37,6 +37,7 @@ lib: libModules: callingFlakePath: rec {
       specialArgs = {
         inherit inputs libModules callingFlakePath libx;
       };
+      nixpkgs.hostPlatform = system;
       modules =
         [
           {
@@ -84,49 +85,4 @@ lib: libModules: callingFlakePath: rec {
           mkHost ({ hostname = name; } // value)
       )
       configs;
-
-  mkColmena =
-    { description ? ""
-    , configurations
-    , nixpkgs
-    , deployments
-    ,
-    }:
-    let
-      inherit (builtins) mapAttrs;
-
-      renameAttr = oldName: newName: set:
-        if builtins.hasAttr oldName set
-        then
-          let
-            value = set.${oldName};
-          in
-          builtins.removeAttrs set [ oldName ] // { ${newName} = value; }
-        else set;
-
-      mvIp = deploy: renameAttr "ip" "targetHost" deploy;
-    in
-    {
-      meta = {
-        inherit description nixpkgs;
-        nodeNixpkgs = mapAttrs (name: value: value.pkgs) configurations;
-        nodeSpecialArgs = mapAttrs (name: value: value._module.specialArgs) configurations;
-      };
-    }
-    // mapAttrs
-      (name: value: {
-        imports =
-          [
-            {
-              deployment =
-                {
-                  buildOnTarget = true;
-                  targetHost = name;
-                }
-                // mvIp value;
-            }
-          ]
-          ++ configurations.${name}._module.args.modules;
-      })
-      deployments;
 }
