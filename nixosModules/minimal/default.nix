@@ -68,7 +68,6 @@ in
       wget
       ncdu
       fd
-      glances
       iperf3
       dnsutils
       fastfetch
